@@ -1,0 +1,1003 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Наша CRM",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/area": {
+            "get": {
+                "tags": [
+                    "Площадки"
+                ],
+                "summary": "Получить список Площадок",
+                "description": "Вернет список Площадок",
+                "operationId": "41f7580c10f03d52783a7693035433cb",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger",
+                                                    "description": "Fanger",
+                                                    "work_time": "Fanger",
+                                                    "address": "Москва, Ленина 1"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "name": "Fanger",
+                                                    "description": "Fanger",
+                                                    "work_time": "Fanger",
+                                                    "address": "Москва, Ленина 1"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/area/{area_id}": {
+            "get": {
+                "tags": [
+                    "Площадки"
+                ],
+                "summary": "Получить Площадку по id",
+                "description": "Вернет Площадку по id",
+                "operationId": "eeb01c984681f56df7e35c7fdf378917",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Площадки",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "work_time": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": "Москва"
+                                        },
+                                        "street": {
+                                            "type": "string",
+                                            "example": "Ленина"
+                                        },
+                                        "house": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "building": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/area/add": {
+            "post": {
+                "tags": [
+                    "Площадки"
+                ],
+                "summary": "Добавить площадку",
+                "description": "Нужно передать поля name,city, street, house",
+                "operationId": "dc5a558ffa773a8562653314dd57cb54",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "city",
+                                    "street",
+                                    "house"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "work_time": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Москва"
+                                    },
+                                    "street": {
+                                        "type": "string",
+                                        "example": "Ленина"
+                                    },
+                                    "house": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "building": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/area/update/{area_id}": {
+            "put": {
+                "tags": [
+                    "Площадки"
+                ],
+                "summary": "Обновить площадку",
+                "description": "Нужно передать поля name,city, street, house",
+                "operationId": "7a6249b33877ab3c3bba317d6b404a8f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "work_time": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Москва"
+                                    },
+                                    "street": {
+                                        "type": "string",
+                                        "example": "Ленина"
+                                    },
+                                    "house": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "building": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/area/delete/{area_id}": {
+            "delete": {
+                "tags": [
+                    "Площадки"
+                ],
+                "summary": "Удалить площадку по id",
+                "description": "Вернет JsonResponse",
+                "operationId": "d08ae21395e7ba0459ce66a5efa22e23",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID площадки",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group/category": {
+            "get": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "Получить список категорий групп",
+                "description": "Вернет список всех категорий групп текущего пользователя",
+                "operationId": "078c843ef8e3fde32fd8291743dd5bc9",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "name": "Fanger"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group/category/add": {
+            "post": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "Добавить категорию группы",
+                "description": "Нужно передать поля name",
+                "operationId": "2cae205d4eeee68c72178baa713ce8d1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group/{group_id}": {
+            "get": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "Получить группу по id",
+                "description": "Вернет группу по id",
+                "operationId": "a3cb9250261451d7f83108f0aa4ca377",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Площадки",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "area": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group": {
+            "get": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "Получить список групп",
+                "description": "Вернет список всех групп текущего пользователя",
+                "operationId": "2e995784cd8fba0db9a1cecb722274fc",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    },
+                                                    "area": {
+                                                        "type": "object",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger",
+                                                    "description": "Fanger",
+                                                    "area": []
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "name": "Fanger",
+                                                    "description": "Fanger",
+                                                    "area": []
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group/add": {
+            "post": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "Добавить группу",
+                "description": "Нужно передать поля name,area_id",
+                "operationId": "d78fce09fe4b79ca370f4e6155f73e2a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "area_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "area_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group/update/{group_id}": {
+            "put": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "обновить группу",
+                "description": "Нужно передать поля name,city, street, house",
+                "operationId": "85d44d13abae8fe538469f0ad2e72a06",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "area_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/group/delete/{area_id}": {
+            "delete": {
+                "tags": [
+                    "Группы"
+                ],
+                "summary": "Удалить группу по id",
+                "description": "Вернет JsonResponse",
+                "operationId": "bd0b4f0725136b7adf1918c6376f9511",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID группы",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Авторизация"
+                ],
+                "summary": "Зарегестироваться",
+                "description": "Нужно передать все поля",
+                "operationId": "c7bb21a0d87049e161b8e4c9b0d909f2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "name",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@test.com"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Oxana"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Авторизация"
+                ],
+                "summary": "Войти",
+                "description": "Нужно передать все поля",
+                "operationId": "dd51a484b7fa0f97c7680fdbde14cf5f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@test.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "get": {
+                "tags": [
+                    "Авторизация"
+                ],
+                "summary": "Разлогинить",
+                "description": "Удалит токен",
+                "operationId": "90a8411aa8f7315b8ce0ebafbbbe580d",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Успешно разлогирован"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "get": {
+                "tags": [
+                    "Авторизация"
+                ],
+                "summary": "Обновить",
+                "description": "Обновить токен и время жизни",
+                "operationId": "2d9ca89ff0a6d291124a94b024e5efe1",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL3JlZnJlc2giLCJpYXQiOjE2NTY1OTE1MDAsImV4cCI6MjI2NjUyNjg2NjgzMywibmJmIjoxNjU2NTkzNjEzLCJqdGkiOiJiVHltT2xIZVhoVHRqaTVnIiwic3ViIjoiMTEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.soph4dzb8saATs0G4Gh6uBt-uXAeTeewaOMUDBI20ro"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "bearer"
+                                        },
+                                        "expires_in": {
+                                            "type": "string",
+                                            "example": 600
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Авторизация"
+                ],
+                "summary": "Получить авторизовааного пользоавателя ",
+                "description": "Получить авторизовааного пользоавателя ",
+                "operationId": "b5de204f5e452ef51327c691aa99e77c",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 11
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Oksana"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "test@test.ru"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cities": {
+            "get": {
+                "tags": [
+                    "Геолокоция"
+                ],
+                "summary": "Получить список городов",
+                "description": "Вернет список городов, соответствующих get-параметру name",
+                "operationId": "72317a75289d3e5a951692b9968b4222",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger"
+                                                },
+                                                {
+                                                    "id": "",
+                                                    "name": ""
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        }
+    }
+}

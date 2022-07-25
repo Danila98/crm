@@ -1,0 +1,168 @@
+@font-face {
+    font-family: "LinuxLibertine";
+    src: url("fonts/LinBiolinum.woff2") format("woff2"),
+    url("fonts/LinBiolinum.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "LinuxLibertine";
+    src: url("fonts/LinBiolinumB.woff2") format("woff2"),
+    url("fonts/LinBiolinumB.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+    color: #000;
+    font-weight: 400;
+    padding: 0 0;
+    margin: 0 0;
+}
+ul,
+ol,
+li {
+    list-style: none;
+    padding: 0 0;
+    margin: 0 0;
+}
+img {
+    vertical-align: top;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: inherit;
+    font-size: inherit;
+}
+body {
+    line-height: 1;
+    font-size: 1.3rem;
+    background: #fafafa;
+    color: black;
+    font-weight: normal;
+    font-family: 'LinuxLibertine', sans-serif;
+    height: 100vh;
+    overflow-y: auto !important;
+}
+.container{
+    min-height: 100%;
+    overflow: hidden;
+    display: flex;
+    background: #ffd8c1;
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffd8c1;
+    margin: 10px auto;
+    min-width: 300px;
+}
+.tags{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.card-header{
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: #ffd8c1;
+    margin: 20px 0 10px 0;
+}
+.card-body{
+    width: 400px; /* Ширина области */
+    height: 100%; /* Высота области */
+    overflow: hidden;
+    min-width: 300px; /* Минимальная ширина */
+    margin: 5px 0;
+    /* padding: -15px 0; */
+}
+.card_img{
+    width: 100%;
+    /* margin: -35% 0 0 0; */
+}
+@media (max-width: 740px) {
+    .card-body{
+        width: 330px; /* Ширина области */
+        height: 100%; /* Высота области */
+        overflow: hidden;
+        /* min-width: 300px; Минимальная ширина */
+        margin: 5px 0;
+        /* padding: -15px 0; */
+    }
+}
+@media (max-width: 400px) {
+    .card-body{
+        width: 300px; /* Ширина области */
+        height: 100%; /* Высота области */
+        overflow: hidden;
+        /* min-width: 300px; Минимальная ширина */
+        margin: 5px 0;
+        /* padding: -15px 0; */
+    }
+}
+.badge{
+    color: #000;
+    margin: 5px 0;
+    font-size: 1rem;
+    background-color: #aeaeae;
+}
+.buttons{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    margin: 20px 0;
+}
+.btn{
+    margin: 10px 60px;
+    height: 40px;
+    width: 250px;
+    color: #000;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}
+.btn-danger{
+    background-color: #e1bba9;
+    font-weight: 700;
+}
+.btn-success{
+    background-color: #c4a896;
+    font-weight: 700;
+}
+.btn:hover{
+    color: #000;
+    background-color: #fff;
+    transition: 2s;
+
+}
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 10px; /* demo only */
+}
+.view
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
