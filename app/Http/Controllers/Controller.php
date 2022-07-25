@@ -20,6 +20,6 @@ class Controller extends BaseController
 
     public function index()
     {
-        return view('main');
+        return 'Вы кто такие, я вас не звал, идите нахуй';
     }
 }
