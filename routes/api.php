@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Accounting\CategoryController;
 use App\Http\Controllers\Api\Accounting\TransactionController;
 use App\Http\Controllers\Api\Area\AreaController;
 use App\Http\Controllers\Api\Area\GroupCategoryController;
+use App\Http\Controllers\Api\Area\GroupController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Geo\CityController;
 use App\Models\Accounting\Transaction;
@@ -73,8 +74,19 @@ Route::group([
         Route::put('/update/{id}', [AreaController::class, 'update'])->middleware('auth:api');
         Route::delete('/delete/{id}', [AreaController::class, 'destroy'])->middleware('auth:api');
         Route::get('/{id}', [AreaController::class, 'show'])->middleware('auth:api');
-        Route::post('/category/add', [GroupCategoryController::class, 'store'])->middleware('auth:api');
+    });
+    Route::group([
+        'middleware' => 'api',
+        'prefix' => 'group'
+    ], function ($router) {
         Route::get('/category', [GroupCategoryController::class, 'list'])->middleware('auth:api');
+        Route::get('/', [GroupController::class, 'list'])->middleware('auth:api');
+        Route::post('/add', [GroupController::class, 'store'])->middleware('auth:api');
+        Route::put('/update/{id}', [GroupController::class, 'update'])->middleware('auth:api');
+        Route::delete('/delete/{id}', [GroupController::class, 'destroy'])->middleware('auth:api');
+        Route::get('/{id}', [GroupController::class, 'show'])->middleware('auth:api');
+        Route::post('/category/add', [GroupCategoryController::class, 'store'])->middleware('auth:api');
+
         Route::delete('/category/delete/{id}', [GroupCategoryController::class, 'destroy'])->middleware('auth:api');
     });
     Route::group([

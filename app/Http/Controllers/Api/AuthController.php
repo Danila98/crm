@@ -50,6 +50,7 @@ class   AuthController extends ApiController
             return response()->json($validator->errors());
         }
         $user = User::create([
+            'name' => 'test',
             'first_name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
