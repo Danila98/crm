@@ -6,6 +6,7 @@ use App\Models\Accounting\TrainerAccount;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use function Symfony\Component\Translation\t;
 
 class   AuthController extends ApiController
 {
@@ -49,18 +50,24 @@ class   AuthController extends ApiController
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $user = User::create([
-            'name' => 'test',
-            'first_name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => bcrypt($request->get('password')),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->get('name'),
+                'first_name' => $request->get('name'),
+                'email' => $request->get('email'),
+                'password' => bcrypt($request->get('password')),
+            ]);
+        }catch (\Exception $e)
+        {
+            return $this->sendError(400, 'error create user', $e->getMessage());
+        }
+
         TrainerAccount::create([
             'user_id' => $user->id,
             'max_pupils' => TrainerAccount::DEFAULT_MAX_PUPILS,
             'pupils' => 0
         ]);
-        $token = auth('api')->attempt($validator->validated());
+        $token = auth('api')->attempt(['email' => $request->get('email'), 'password' => $request->get('password')]);
         return $this->sendResponse(200, $this->respondWithToken($token));
     }
     /**
