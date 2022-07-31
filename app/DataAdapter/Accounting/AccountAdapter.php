@@ -14,8 +14,8 @@ class AccountAdapter extends DataAdapter
     public function getModelData(Model $account) : array
     {
         return [
-            'user' => $account->user,
-            'total' => $account->total,
+            'pupils' => $account->pupils,
+            'maxPupils' => $account->max_pupils,
         ];
     }
 }

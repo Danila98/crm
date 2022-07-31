@@ -2,11 +2,19 @@
 
 namespace App\DataAdapter\User;
 
+use App\DataAdapter\Accounting\AccountAdapter;
 use App\Models\User;
 use Kiryanov\Adapter\DataAdapter\DataAdapter;
 use \Illuminate\Database\Eloquent\Model;
 class UserAdapter extends DataAdapter
 {
+    protected AccountAdapter $accountAdapter;
+
+    public function __construct(AccountAdapter $accountAdapter)
+    {
+        $this->accountAdapter = $accountAdapter;
+    }
+
     /**
      * @param User $user
      */
@@ -14,8 +22,12 @@ class UserAdapter extends DataAdapter
     {
         return [
             'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email
+            'firstName' => $user->first_name,
+            'lastName' => $user->last_name,
+            'middleName' => $user->middle_name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'account' => $this->accountAdapter->getModelData($user->account)
         ];
     }
 }

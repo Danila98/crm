@@ -119,6 +119,53 @@ class GroupCategoryController extends ApiController
         return $this->sendResponse(201, ['category' => $category]);
     }
 
+    /**
+     * Создает категорию для группы
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @OA\Post(
+     * path="/api/v1/group/category/update/{category_id}",
+     * summary="Обновить категорию группы",
+     * description="Нужно передать поля name",
+     * tags={"Группы"},
+     * security={ {"bearer": {} }},
+     * @OA\RequestBody(
+     *    required=true,
+     *    @OA\JsonContent(
+     *       required={"name"},
+     *       @OA\Property(property="name", type="string",  example="test"),
+     *    ),
+     * ),
+     * @OA\Response(
+     *     response=401,
+     *     description="Unauthenticated",
+     * ),
+     * @OA\Response(
+     *    response=422,
+     *    description="Вернет ошибку валидации, если поля не валидны или какие-то не отправлены",
+     * )
+     * )
+     */
+    public function update(int $id, Request $request)
+    {
+        try {
+            $category = $this->categoryRepository->find($id);
+        }catch (\Exception $e)
+        {
+            return $this->sendError(404, 'Not found', $e->getMessage());
+        }
+
+        $request->validate([
+            'name'          => 'required|string',
+        ]);
+        $request = $request->all();
+        $category->name = $request['name'];
+        $category->save();
+
+        return $this->sendResponse();
+    }
+
     public function destroy(int $id)
     {
         $category = $this->categoryRepository->find($id);

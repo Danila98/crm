@@ -54,6 +54,7 @@ Route::group([
         Route::delete('/delete/{id}', [GroupController::class, 'destroy'])->middleware('auth:api');
         Route::get('/{id}', [GroupController::class, 'show'])->middleware('auth:api');
         Route::post('/category/add', [GroupCategoryController::class, 'store'])->middleware('auth:api');
+        Route::put('/category/update/{id}', [GroupCategoryController::class, 'update'])->middleware('auth:api');
 
         Route::delete('/category/delete/{id}', [GroupCategoryController::class, 'destroy'])->middleware('auth:api');
     });

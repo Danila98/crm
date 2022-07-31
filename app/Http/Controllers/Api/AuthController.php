@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DataAdapter\User\UserAdapter;
 use App\Models\Accounting\TrainerAccount;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use mysql_xdevapi\Exception;
 use function Symfony\Component\Translation\t;
 
 class   AuthController extends ApiController
 {
+
+    protected UserAdapter $userAdapter;
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserAdapter $userAdapter)
     {
+        $this->userAdapter = $userAdapter;
         $this->middleware('api', ['except' => ['register', 'login', 'logout', 'refresh']]);
     }
     /**
@@ -172,8 +177,12 @@ class   AuthController extends ApiController
      *          description="Success",
      *          @OA\JsonContent(
      *              @OA\Property(property="id", type="int", example=11),
-     *              @OA\Property(property="name", type="string", example="Oksana"),
+     *              @OA\Property(property="firstName", type="string", example="firstName"),
+     *              @OA\Property(property="lastName", type="string", example="lastName"),
+     *              @OA\Property(property="middleName", type="string", example="middleName"),
      *              @OA\Property(property="email", type="string", example="test@test.ru"),
+     *              @OA\Property(property="phone", type="string", example="88005353535"),
+
      *          ),
      *       ),
      *      @OA\Response(
@@ -184,8 +193,37 @@ class   AuthController extends ApiController
      */
     public function me()
     {
-        return $this->sendResponse(200, ['user' => auth('api')->user()]);
+        $user = auth('api')->user();
+
+        return $this->sendResponse(200, ['user' => $this->userAdapter->getModelData($user)]);
     }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255|unique:users',
+            'firstName' => 'required',
+            'lastName' => 'nullable',
+            'middleName' => 'nullable',
+            'phone' => 'nullable',
+        ]);
+        $request = $request->all();
+        $user = auth('api')->user();
+        $user->email = $request['email'];
+        $user->firstName = $request['firstName'];
+        $user->lastName = $request['lastName'];
+        $user->middleName = $request['middleName'];
+        $user->phone = $request['phone'];
+
+        try {
+            $user->save();
+        }catch (\Exception $e)
+        {
+            return $this->sendError();
+        }
+        return $this->sendResponse(200, ['user' => $this->userAdapter->getModelData($user)]);
+    }
+
     /**
      * Вернет ошибку авторизации.
      *
