@@ -2,6 +2,7 @@
 
 namespace App\DataAdapter\Area;
 
+use App\Models\Area\Group;
 use App\Repository\Area\AreaRepository;
 use Illuminate\Database\Eloquent\Model;
 use Kiryanov\Adapter\DataAdapter\DataAdapter;
@@ -25,6 +26,7 @@ class GroupAdapter extends DataAdapter
             'name' => $group->name,
             'description' => $group->description,
             'area' => $area,
+            'status' => Group::mapStatuses($group->status),
         ];
     }
 }

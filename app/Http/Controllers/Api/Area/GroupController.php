@@ -135,7 +135,7 @@ class GroupController extends ApiController
      */
     public function list()
     {
-        $account = $this->accountRepository->findByUser(auth('api')->user);
+        $account = $this->accountRepository->findByUser(auth('api')->user());
         $groups = $this->groupRepository->findByAccount($account);
 
         return $this->sendResponse(200, $this->groupAdapter->getArrayModelData($groups));

@@ -9,12 +9,16 @@ class Activity extends Model
 {
     use HasFactory;
 
+    CONST PLANED = 1;
+    CONST CANCELED = 2;
+    CONST END = 3;
+
     protected $fillable = [
         'id',
         'name',
-        'description',
-        'time',
-        'is_end' => 'isEnd',
+        'start',
+        'end',
+        'status',
         'activity_id' => 'activityId',
     ];
 }
