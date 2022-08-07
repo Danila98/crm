@@ -124,7 +124,7 @@ class GroupCategoryController extends ApiController
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
-     * @OA\Post(
+     * @OA\Put(
      * path="/api/v1/group/category/update/{category_id}",
      * summary="Обновить категорию группы",
      * description="Нужно передать поля name",

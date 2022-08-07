@@ -5,6 +5,263 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/v1/activity/category/{category_id}": {
+            "get": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Получить категорию по id",
+                "description": "Вернет категории по id",
+                "operationId": "2e63eb3d994b87b60b9b79c1941fd941",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID категории",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "test"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/activity/category": {
+            "get": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Получить список категорию занятий",
+                "description": "Вернет список всех категорий занятий текущего пользователя",
+                "operationId": "cb8ea88ab43ce694462c61f0a21f2bbe",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "name": "Fanger"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/activity/category/add": {
+            "post": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Добавить категорию занятия",
+                "description": "Нужно передать поля name",
+                "operationId": "23706b9be4bf1641c1ef1abcf4c7f2aa",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/activity/category/update/{category_id}": {
+            "put": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Обновить категорию занятия",
+                "description": "Нужно передать поля name",
+                "operationId": "04e9292272941d41947e381a96d26bbd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/activity/add": {
+            "post": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Добавить занятие",
+                "description": "Нужно передать поля name, start, end, area_id, category_id",
+                "operationId": "c72cf7af9df60eee0ffa001d91493762",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "start": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2022-08-07 23:12:30"
+                                    },
+                                    "end": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2022-08-07 23:12:30"
+                                    },
+                                    "area_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "group_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Вернет ошибку валидации, если поля не валидны или какие-то не отправлены"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/v1/area": {
             "get": {
                 "tags": [
@@ -440,13 +697,13 @@
             }
         },
         "/api/v1/group/category/update/{category_id}": {
-            "post": {
+            "put": {
                 "tags": [
                     "Группы"
                 ],
                 "summary": "Обновить категорию группы",
                 "description": "Нужно передать поля name",
-                "operationId": "4f6ccdc17359f9b9891bb3ed4835fded",
+                "operationId": "532738e53f3b8feca9256cbff4e6952b",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -541,14 +798,14 @@
                 ]
             }
         },
-        "/api/v1/group": {
+        "/api/v1/group/area/{area_id}": {
             "get": {
                 "tags": [
                     "Группы"
                 ],
-                "summary": "Получить список групп",
-                "description": "Вернет список всех групп текущего пользователя",
-                "operationId": "2e995784cd8fba0db9a1cecb722274fc",
+                "summary": "Получить список  групп пользователя по площадке",
+                "description": "Вернет список групп текущего пользователя по площадке",
+                "operationId": "0c6ac8bce42dfd02ed77d0cd1c256853",
                 "responses": {
                     "200": {
                         "description": "Success",

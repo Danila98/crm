@@ -7,8 +7,7 @@ use App\Models\Accounting\TrainerAccount;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-use mysql_xdevapi\Exception;
-use function Symfony\Component\Translation\t;
+
 
 class   AuthController extends ApiController
 {
@@ -22,7 +21,7 @@ class   AuthController extends ApiController
     public function __construct(UserAdapter $userAdapter)
     {
         $this->userAdapter = $userAdapter;
-        $this->middleware('api', ['except' => ['register', 'login', 'logout', 'refresh']]);
+
     }
     /**
      * @OA\Post(
@@ -100,6 +99,7 @@ class   AuthController extends ApiController
      */
     public function login(): \Illuminate\Http\JsonResponse
     {
+
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {

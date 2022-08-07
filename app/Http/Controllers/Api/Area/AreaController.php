@@ -14,7 +14,7 @@ use App\Services\Support\Map\YandexMapService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Exception\NotFoundException;
-use PHPUnit\Exception;
+
 
 class AreaController extends ApiController
 {
@@ -195,16 +195,16 @@ class AreaController extends ApiController
      */
     public function store(Request $request): JsonResponse
     {
+
         $request->validate([
             'name' => 'required|string',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
             'work_time' => 'nullable|string',
             'city' => 'required|numeric',
             'street' => 'required|string',
             'house' => 'required|numeric',
             'building' => 'nullable',
         ]);
-
         $request = $request->all();
         $building = isset($request['building']) ? is_int($request['building']) ? '/' . $request['building'] : $request['building'] : '';
         $city = $this->cityRepository->find($request['city']);

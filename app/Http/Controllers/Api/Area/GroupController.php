@@ -133,12 +133,68 @@ class GroupController extends ApiController
      *      )
      *     )
      */
-    public function list()
+    /**
+     * @OA\Get(
+     *      path="/api/v1/group/area/{area_id}",
+     *      tags={"Группы"},
+     *      security={ {"bearer": {} }},
+     *      summary="Получить список  групп пользователя по площадке",
+     *      description="Вернет список групп текущего пользователя по площадке",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                property="categories",
+     *                type="array",
+     *                example={{
+     *                  "id": 1,
+     *                  "name": "Fanger",
+     *                  "description": "Fanger",
+     *                  "area": {},
+     *                }, {
+     *                  "id": 2,
+     *                  "name": "Fanger",
+     *                  "description": "Fanger",
+     *                  "area": {},
+     *                }},
+     *                @OA\Items(
+     *                      @OA\Property(
+     *                         property="id",
+     *                         type="int",
+     *                         example=""
+     *                      ),
+     *                      @OA\Property(
+     *                         property="name",
+     *                         type="string",
+     *                         example=""
+     *                      ),
+     *                      @OA\Property(
+     *                         property="area",
+     *                         type="object",
+     *                         example=""
+     *                      )
+     *                ),
+     *             ),
+     *     ),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+     */
+    public function listByArea(int $area_id)
     {
         $account = $this->accountRepository->findByUser(auth('api')->user());
-        $groups = $this->groupRepository->findByAccount($account);
+        $groups = $this->groupRepository->findByAreaAndAccount($area_id, $account->id);
 
-        return $this->sendResponse(200, $this->groupAdapter->getArrayModelData($groups));
+        return $this->sendResponse(200, ['groups' =>$this->groupAdapter->getArrayModelData($groups)]);
     }
     /**
      * Создает группу
@@ -191,7 +247,7 @@ class GroupController extends ApiController
             'account_id'    => $account->id,
         ]);
 
-        return $this->sendResponse(201, ['area' => $this->groupAdapter->getModelData($group)]);
+        return $this->sendResponse(201, ['group' => $this->groupAdapter->getModelData($group)]);
     }
     /**
      * Обновит группу

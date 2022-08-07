@@ -27,6 +27,7 @@ class GroupAdapter extends DataAdapter
             'description' => $group->description,
             'area' => $area,
             'status' => Group::mapStatuses($group->status),
+            'category' => $group->category->name
         ];
     }
 }

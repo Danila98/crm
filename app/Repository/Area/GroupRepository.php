@@ -32,9 +32,11 @@ class GroupRepository
         return Group::where(['area_id' => $area->id])->get();
     }
 
-    public function findByAreaAndAccount(Area $area, TrainerAccount $account)
+    public function findByAreaAndAccount(int $area_id, int $account_id)
     {
-        return Group::where(['area_id' => $area->id, 'account_id' => $account->id])->get();
+        return Group::where(['area_id' => $area_id, 'account_id' => $account_id])->get();
     }
+
+
 
 }
