@@ -10,21 +10,9 @@ class Activity extends Model
 {
     use HasFactory;
 
-    CONST PLANED = 1;
-    CONST CANCELED = 2;
-    CONST END = 3;
-
-    protected $fillable = [
-        'id',
-        'name',
-        'start',
-        'end',
-        'status',
-        'area_id',
-        'account_id',
-        'group_id',
-        'category_id'
-    ];
+    public const PLANED = 1;
+    public const  CANCELED = 2;
+    public const  END = 3;
 
     public function group()
     {

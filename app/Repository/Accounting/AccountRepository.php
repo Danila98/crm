@@ -8,8 +8,15 @@ class AccountRepository
 {
     public function findByUser($user)
     {
-        $account = TrainerAccount::where(['user_id' => $user->id])->first();
+        return TrainerAccount::where(['user_id' => $user->id])->first();
+    }
 
-        return $account;
+    public function create(
+        int  $userId,
+        ?int $maxPupils,
+        ?int $pupils
+    )
+    {
+
     }
 }

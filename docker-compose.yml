@@ -43,8 +43,8 @@ services:
         ports:
             - "3310:3306"
         environment:
-            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-            MYSQL_DATABASE: "${DB_DATABASE}"
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: polygon
             MYSQL_USER: root
             MYSQL_PASSWORD: root
             SERVICE_TAGS: dev

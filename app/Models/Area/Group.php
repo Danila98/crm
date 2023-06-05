@@ -11,20 +11,11 @@ class Group extends Model
 {
     use HasFactory;
 
-    CONST STATUS_NEW = 0;
-    CONST STATUS_ACTIVE = 1;
-    CONST STATUS_BLOCK = 2;
-    CONST STATUS_LEAVE = 3;
+    public const  STATUS_NEW = 0;
+    public const  STATUS_ACTIVE = 1;
+    public const  STATUS_BLOCK = 2;
+    public const  STATUS_LEAVE = 3;
 
-    protected $fillable = [
-        'id',
-        'name',
-        'description',
-        'area_id',
-        'status',
-        'account_id',
-        'category_id'
-    ];
     public function category()
     {
         return $this->belongsTo(GroupCategory::class);

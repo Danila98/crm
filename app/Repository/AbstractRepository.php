@@ -9,15 +9,13 @@ abstract class AbstractRepository
 {
     protected abstract function getClass() : string;
 
-    public function find(int $id)
+    public function get(int $id)
     {
         $class = $this->getClass();
         $model = $class::find($id);
-        if ($model)
-        {
+        if ($model) {
             return $model;
-        }else
-        {
+        } else {
             throw new NotFoundException();
         }
     }
@@ -31,30 +29,25 @@ abstract class AbstractRepository
     public function update(int $id, array $params) : Model
     {
         $model = $this->find($id);
-        if ($model)
-        {
-            foreach ($params as $attribute => $value)
-            {
+        if ($model) {
+            foreach ($params as $attribute => $value) {
                 $model->$attribute = $value;
             }
             $model->save();
-        }else
-        {
+        } else {
             throw new NotFoundException();
         }
 
         return $model;
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $class = $this->getClass();
         $model = $class::find($id);
-        if ($model)
-        {
+        if ($model) {
             $model->delete();
-        }else
-        {
+        } else {
             throw new NotFoundException();
         }
     }

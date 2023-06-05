@@ -12,7 +12,8 @@ abstract class ApiController extends Controller
     {
         return Response::json([
             'success' => false,
-            'message' => $message
+            'content' => $content,
+            'message' => $message,
         ], $code);
     }
     protected function sendResponse(int $code = 200, array $body = [], string $content = 'success'): \Illuminate\Http\JsonResponse

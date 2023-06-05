@@ -11,8 +11,8 @@
         "laravel/framework": "^9.11",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
-        "tcg/voyager": "^1.5",
-        "tymon/jwt-auth": "*"
+        "tymon/jwt-auth": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "fakerphp/faker": "*",

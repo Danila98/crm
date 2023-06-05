@@ -3,26 +3,39 @@
 namespace App\Http\Controllers\Api;
 
 use App\DataAdapter\User\UserAdapter;
-use App\Models\Accounting\TrainerAccount;
-use Illuminate\Http\Request;
+use App\Form\Accounting\TrainerAccountForm;
+use App\Form\User\UserForm;
 use App\Models\User;
+use App\Services\Manage\Accounting\TrainerAccountManageService;
+use App\Services\Manage\UserManageService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 
-class   AuthController extends ApiController
+class AuthController extends ApiController
 {
-
     protected UserAdapter $userAdapter;
+    protected UserManageService $userManageService;
+    protected TrainerAccountManageService $trainerAccountManageService;
+
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct(UserAdapter $userAdapter)
+    public function __construct(
+        UserAdapter                 $userAdapter,
+        UserManageService           $userManageService,
+        TrainerAccountManageService $trainerAccountManageService
+    )
     {
         $this->userAdapter = $userAdapter;
-
+        $this->userManageService = $userManageService;
+        $this->trainerAccountManageService = $trainerAccountManageService;
     }
+
     /**
      * @OA\Post(
      * path="/api/auth/register",
@@ -46,38 +59,29 @@ class   AuthController extends ApiController
      */
     public function register(Request $request): \Illuminate\Http\JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255|unique:users',
-            'name' => 'required',
-            'password'=> 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
+        $form = new UserForm();
+        if (!$form->load($request->all()) || !$form->validate()) {
+            return response()->json($form->getError());
         }
         try {
-            $user = User::create([
-                'name' => $request->get('name'),
-                'first_name' => $request->get('name'),
-                'email' => $request->get('email'),
-                'password' => bcrypt($request->get('password')),
-            ]);
-        }catch (\Exception $e)
-        {
+            $user = $this->userManageService->create($form);
+            $formTrainerAccount = new TrainerAccountForm();
+            if (!$formTrainerAccount->load(['userId' => $user->id]) || !$formTrainerAccount->validate()) {
+                return response()->json($formTrainerAccount->getError());
+            }
+            $account = $this->trainerAccountManageService->create($formTrainerAccount);
+        } catch (Exception $e) {
             return $this->sendError(400, 'error create user', $e->getMessage());
         }
-
-        TrainerAccount::create([
-            'user_id' => $user->id,
-            'max_pupils' => TrainerAccount::DEFAULT_MAX_PUPILS,
-            'pupils' => 0
-        ]);
         $token = auth('api')->attempt(['email' => $request->get('email'), 'password' => $request->get('password')]);
+
         return $this->sendResponse(200, $this->respondWithToken($token));
     }
+
     /**
      * Get a JWT via given credentials.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @OA\Post(
      * path="/api/auth/login",
      * summary="Войти",
@@ -97,15 +101,13 @@ class   AuthController extends ApiController
      * )
      * )
      */
-    public function login(): \Illuminate\Http\JsonResponse
+    public function login(): JsonResponse
     {
-
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        $token = auth('api')->attempt($credentials);
+
         return $this->sendResponse(200, $this->respondWithToken($token));
     }
     /**
@@ -207,20 +209,13 @@ class   AuthController extends ApiController
             'middleName' => 'nullable',
             'phone' => 'nullable',
         ]);
-        $request = $request->all();
+        $form = new UserForm();
+        /** @var User $user */
         $user = auth('api')->user();
-        $user->email = $request['email'];
-        $user->firstName = $request['firstName'];
-        $user->lastName = $request['lastName'];
-        $user->middleName = $request['middleName'];
-        $user->phone = $request['phone'];
-
-        try {
-            $user->save();
-        }catch (\Exception $e)
-        {
-            return $this->sendError();
+        if ($form->load($request->all()) && $form->validate()) {
+            $user = $this->userManageService->update($form, $user->id);
         }
+
         return $this->sendResponse(200, ['user' => $this->userAdapter->getModelData($user)]);
     }
 

@@ -11,21 +11,16 @@ class TrainerAccount extends Model
 {
     use HasFactory;
 
-    const DEFAULT_MAX_PUPILS = 10;
-
-    protected $fillable = [
-        'id',
-        'user_id',
-        'pupils',
-        'max_pupils' => 'maxPupils',
-    ];
+    public const DEFAULT_MAX_PUPILS = 10;
+    public const DEFAULT_PUPILS = 0;
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function area()
     {
-        return $this->belongsToMany(Area::class, 'trainer_account_area', 'account_id' ,'area_id');
+        return $this->belongsToMany(Area::class, 'trainer_account_area', 'account_id', 'area_id');
     }
 }

@@ -2,25 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Accounting\Account;
-use App\Models\Accounting\Category;
 use App\Models\Accounting\TrainerAccount;
-use App\Models\Accounting\Transaction;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use TCG\Voyager\Traits\Translatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends \TCG\Voyager\Models\User implements JWTSubject
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, Translatable;
-
-
-    protected $translatable = ['name'];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -75,13 +62,5 @@ class User extends \TCG\Voyager\Models\User implements JWTSubject
     public function account()
     {
         return $this->hasOne(TrainerAccount::class);
-    }
-    public function categories()
-    {
-        return $this->hasMany(Category::class);
-    }
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
     }
 }

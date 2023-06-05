@@ -18,12 +18,9 @@ class AreaRepository
 
     public function find(int $id)
     {
-        $area = Area::find($id);
-        if ($area)
-        {
+        if ($area = Area::find($id)) {
             return $area;
-        }else
-        {
+        } else {
             throw new NotFoundException();
         }
     }

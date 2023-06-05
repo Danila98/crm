@@ -8,10 +8,13 @@ use Exception;
 
 class YandexMapService
 {
-    public function getCoordinatesByAddress(string $address)
+    /**
+     * @throws YandexMapException
+     */
+    public function getCoordinatesByAddress(string $address): array
     {
         try {
-            $ch = curl_init('https://geocode-maps.yandex.ru/1.x/?apikey='.env('YANDEX_GEO').'&format=json&geocode=' . urlencode($address));
+            $ch = curl_init('https://geocode-maps.yandex.ru/1.x/?apikey=' . env('YANDEX_GEO') . '&format=json&geocode=' . urlencode($address));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_HEADER, false);

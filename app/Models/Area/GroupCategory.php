@@ -8,10 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class GroupCategory extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'id',
-        'name',
-        'account_id'
-    ];
 }
