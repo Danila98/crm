@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Response;
 
 abstract class ApiController extends Controller
 {
-
     protected function sendError(int $code = 400, string $content = 'error', string $message = 'error'): \Illuminate\Http\JsonResponse
     {
         return Response::json([

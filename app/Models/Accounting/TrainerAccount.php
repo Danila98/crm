@@ -14,6 +14,12 @@ class TrainerAccount extends Model
     public const DEFAULT_MAX_PUPILS = 10;
     public const DEFAULT_PUPILS = 0;
 
+    protected $fillable = [
+        'user_id',
+        'pupils',
+        'max_pupils',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

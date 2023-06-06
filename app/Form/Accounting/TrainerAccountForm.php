@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class TrainerAccountForm extends BaseForm
 {
-    private int $userId;
-    private ?int $maxPupils;
-    private ?int $pupils;
+    private ?int $userId = null;
+    private ?int $maxPupils = null;
+    private ?int $pupils = null;
     private string|bool $error;
 
     public function load(array $data): bool
@@ -31,6 +31,7 @@ class TrainerAccountForm extends BaseForm
 
     public function validate(): bool
     {
+        $this->createValidator();
         $this->error = $this->validator->fails() ? $this->validator->errors() : false;
 
         return !$this->validator->fails();
