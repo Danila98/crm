@@ -2,12 +2,12 @@
 
 namespace App\Form\Accounting;
 
-use App\Form\Form;
+use App\Form\BaseForm;
 use App\Models\Accounting\TrainerAccount;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 
-class TrainerAccountForm implements Form
+class TrainerAccountForm extends BaseForm
 {
     private int $userId;
     private ?int $maxPupils;
@@ -31,18 +31,9 @@ class TrainerAccountForm implements Form
 
     public function validate(): bool
     {
-        $validator = Validator::make([
-            'userId' => $this->userId,
-            'maxPupils;' => $this->maxPupils,
-            'password' => $this->pupils
-        ], [
-            'userId' => 'required|numeric',
-            'name' => 'numeric',
-            'pupils' => 'numeric'
-        ]);
-        $this->error = $validator->fails() ? $validator->errors() : false;
+        $this->error = $this->validator->fails() ? $this->validator->errors() : false;
 
-        return !$validator->fails();
+        return !$this->validator->fails();
     }
 
     public function getError(): bool|string
@@ -65,4 +56,16 @@ class TrainerAccountForm implements Form
         return $this->pupils;
     }
 
+    function createValidator(): void
+    {
+        $this->validator = Validator::make([
+            'userId' => $this->userId,
+            'maxPupils;' => $this->maxPupils,
+            'password' => $this->pupils
+        ], [
+            'userId' => 'required|numeric',
+            'name' => 'numeric',
+            'pupils' => 'numeric'
+        ]);
+    }
 }

@@ -6,8 +6,10 @@ use App\DataAdapter\Area\ActivityCategoryAdapter;
 use App\Http\Controllers\Api\ApiController;
 use App\Repository\Accounting\AccountRepository;
 use App\Repository\Area\ActivityCategoryRepository;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Intervention\Image\Exception\NotFoundException;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
 
 class ActivityCategoryController extends ApiController
 {
@@ -15,12 +17,17 @@ class ActivityCategoryController extends ApiController
     protected ActivityCategoryAdapter $activityCategoryAdapter;
     protected ActivityCategoryRepository $categoryRepository;
 
-    public function __construct(AccountRepository $accountRepository, ActivityCategoryAdapter $activityCategoryAdapter, ActivityCategoryRepository $categoryRepository)
+    public function __construct(
+        AccountRepository          $accountRepository,
+        ActivityCategoryAdapter    $activityCategoryAdapter,
+        ActivityCategoryRepository $categoryRepository
+    )
     {
         $this->accountRepository = $accountRepository;
         $this->activityCategoryAdapter = $activityCategoryAdapter;
         $this->categoryRepository = $categoryRepository;
     }
+
     /**
      * @OA\Get(
      *      path="/api/v1/activity/category/{category_id}",
@@ -56,14 +63,14 @@ class ActivityCategoryController extends ApiController
      *      )
      *     )
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         try {
-            $category = $this->categoryRepository->find($id);
-        } catch (NotFoundException $e) {
+            $category = $this->categoryRepository->get($id);
+        } catch (NotFound $e) {
 
             return $this->sendError(404, 'Not Found', $e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             return $this->sendError(400, 'unknown error ', $e->getMessage());
         }
@@ -112,17 +119,18 @@ class ActivityCategoryController extends ApiController
      *      )
      *     )
      */
-    public function list()
+    public function list(): JsonResponse
     {
         $categories = $this->categoryRepository->findByUser(auth('api')->user());
 
         return $this->sendResponse(200, ['categories' => $this->activityCategoryAdapter->getArrayModelData($categories)]);
     }
+
     /**
      * Создает категорию для занятия
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      * @OA\Post(
      * path="/api/v1/activity/category/add",
      * summary="Добавить категорию занятия",
@@ -146,7 +154,7 @@ class ActivityCategoryController extends ApiController
      * )
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'required|string',
@@ -161,11 +169,12 @@ class ActivityCategoryController extends ApiController
 
         return $this->sendResponse(201, ['category' => $this->activityCategoryAdapter->getModelData($category)]);
     }
+
     /**
      * обновляет категорию для заняимй
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      * @OA\Put(
      * path="/api/v1/activity/category/update/{category_id}",
      * summary="Обновить категорию занятия",
@@ -189,7 +198,7 @@ class ActivityCategoryController extends ApiController
      * )
      * )
      */
-    public function update(Request $request, int $category_id)
+    public function update(Request $request, int $category_id): JsonResponse
     {
         $request->validate([
             'name' => 'required|string',

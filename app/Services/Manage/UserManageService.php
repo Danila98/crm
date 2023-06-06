@@ -20,9 +20,11 @@ class UserManageService
     public function create(UserForm $form)
     {
         return User::create([
-            'name' => $form->getFirstName(),
             'first_name' => $form->getFirstName(),
+            'last_name' => $form->getLastName(),
+            'middle_name' => $form->getMiddleName(),
             'email' => $form->getEmail(),
+            'phone' => $form->getPhone(),
             'password' => bcrypt($form->getPassword()
             ),
         ]);

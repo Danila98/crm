@@ -3,12 +3,15 @@
 namespace App\Repository;
 
 use Illuminate\Database\Eloquent\Model;
-use Intervention\Image\Exception\NotFoundException;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
 
 abstract class AbstractRepository
 {
-    protected abstract function getClass() : string;
+    protected abstract function getClass(): string;
 
+    /**
+     * @throws NotFound
+     */
     public function get(int $id)
     {
         $class = $this->getClass();
@@ -16,7 +19,7 @@ abstract class AbstractRepository
         if ($model) {
             return $model;
         } else {
-            throw new NotFoundException();
+            throw new NotFound();
         }
     }
 

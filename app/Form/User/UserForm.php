@@ -2,24 +2,25 @@
 
 namespace App\Form\User;
 
-use App\Form\Form;
+use App\Form\BaseForm;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 
-class UserForm implements Form
+class UserForm extends BaseForm
 {
-    private ?string $firstName;
-    private ?string $lastName;
-    private ?string $middleName;
-    private ?string $phone;
-    private ?string $email;
-    private ?string $password;
+    private ?string $firstName = null;
+    private ?string $lastName = null;
+    private ?string $middleName = null;
+    private ?string $phone = null;
+    private ?string $email = null;
+    private ?string $password = null;
     private string|bool $error;
+
 
     public function load(array $data): bool
     {
         try {
-            $this->firstName = $data['name'] ?? $data['firstName'] ?? null;
+            $this->firstName = $data['firstName'] ?? null;
             $this->lastName = $data['lastName'] ?? '';
             $this->middleName = $data['middleName'] ?? '';
             $this->phone = $data['phone'] ?? '';
@@ -36,24 +37,10 @@ class UserForm implements Form
 
     public function validate(): bool
     {
-        $validator = Validator::make([
-            'name' => $this->firstName,
-            'lastName' => $this->lastName,
-            'middleName' => $this->middleName,
-            'phone' => $this->phone,
-            'email' => $this->email,
-            'password' => $this->password
-        ], [
-            'email' => 'required|string|email|max:255|unique:users',
-            'name' => 'required|string|max:255|',
-            'firstName' => 'string|max:255|',
-            'lastName' => 'string|max:255|',
-            'middleName' => 'string|max:255|',
-            'phone' => 'string|max:10|',
-        ]);
-        $this->error = $validator->fails() ? $validator->errors() : false;
+        $this->createValidator();
+        $this->error = $this->validator->fails() ? $this->validator->errors() : false;
 
-        return !$validator->fails();
+        return !$this->validator->fails();
     }
 
     public function getError(): bool|string
@@ -89,5 +76,23 @@ class UserForm implements Form
     public function getPhone(): ?string
     {
         return $this->phone;
+    }
+
+    protected function createValidator(): void
+    {
+        $this->validator = Validator::make([
+            'firstName' => $this->firstName,
+            'lastName' => $this->lastName,
+            'middleName' => $this->middleName,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'password' => $this->password
+        ], [
+            'email' => 'required|string|email|max:255|unique:users',
+            'firstName' => 'required|string|max:255|',
+            'lastName' => 'string|max:255|',
+            'middleName' => 'string|max:255|',
+            'phone' => 'string|max:10|',
+        ]);
     }
 }

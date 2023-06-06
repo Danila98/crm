@@ -6,20 +6,21 @@ use App\DataAdapter\Geo\CityAdapter;
 use App\Filter\Geo\CityFilter;
 use App\Http\Controllers\Api\ApiController;
 use App\Repository\Geo\CityRepository;
-use Illuminate\Http\Request;
 
 class CityController extends ApiController
 {
     protected CityRepository $cityRepository;
     protected CityAdapter $cityAdapter;
 
-    public function __construct(CityRepository $cityRepository,
-                                CityAdapter $cityAdapter
-                               )
+    public function __construct(
+        CityRepository $cityRepository,
+        CityAdapter    $cityAdapter
+    )
     {
         $this->cityRepository = $cityRepository;
         $this->cityAdapter = $cityAdapter;
     }
+
     /**
      * @OA\Get(
      *      path="/api/v1/cities",
