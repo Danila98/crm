@@ -61,13 +61,13 @@ class AuthController extends ApiController
     {
         $form = new UserForm();
         if (!$form->load($request->all()) || !$form->validate()) {
-            return response()->json($form->getError());
+            return $this->sendError(417, 'Validation error', $form->getError());
         }
         try {
             $user = $this->userManageService->create($form);
             $formTrainerAccount = new TrainerAccountForm();
             if (!$formTrainerAccount->load(['userId' => $user->id]) || !$formTrainerAccount->validate()) {
-                return response()->json($formTrainerAccount->getError());
+                return $this->sendError(417, 'Validation error', $formTrainerAccount->getError());
             }
             $account = $this->trainerAccountManageService->create($formTrainerAccount);
         } catch (Exception $e) {

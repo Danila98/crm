@@ -5,9 +5,9 @@ namespace Tests\Unit\Services\Manage\Accounting;
 use App\Form\Accounting\TrainerAccountForm;
 use App\Models\User;
 use App\Services\Manage\Accounting\TrainerAccountManageService;
-use Tests\Unit\BaseUnitTest;
+use Tests\Unit\BaseTest;
 
-class TrainerAccountManageServiceTest extends BaseUnitTest
+class TrainerAccountManageServiceTest extends BaseTest
 {
     public function test_create_success()
     {

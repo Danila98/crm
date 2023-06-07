@@ -48,17 +48,17 @@ class UserForm extends BaseForm
         return $this->error;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -90,6 +90,7 @@ class UserForm extends BaseForm
         ], [
             'email' => 'required|string|email|max:255|unique:users',
             'firstName' => 'required|string|max:255|',
+            'password' => 'required|string|max:255|',
             'lastName' => 'string|max:255|',
             'middleName' => 'string|max:255|',
             'phone' => 'string|max:10|',

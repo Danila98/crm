@@ -3,9 +3,9 @@
 namespace Tests\Unit\Form\Accounting;
 
 use App\Form\Accounting\TrainerAccountForm;
-use Tests\Unit\BaseUnitTest;
+use Tests\Unit\BaseTest;
 
-class TrainerAccountFormTest extends BaseUnitTest
+class TrainerAccountFormTest extends BaseTest
 {
     /** @dataProvider provider */
     public function test_validate_success(array $data, bool $expected)

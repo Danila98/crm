@@ -6,9 +6,9 @@ use App\Form\User\UserForm;
 use App\Models\User;
 use App\Repository\Accounting\UserRepository;
 use App\Services\Manage\UserManageService;
-use Tests\Unit\BaseUnitTest;
+use Tests\Unit\BaseTest;
 
-class UserManageServiceTest extends BaseUnitTest
+class UserManageServiceTest extends BaseTest
 {
     public function test_create_all_fields_success()
     {

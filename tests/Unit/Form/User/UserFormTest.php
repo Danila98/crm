@@ -3,9 +3,9 @@
 namespace Tests\Unit\Form\User;
 
 use App\Form\User\UserForm;
-use Tests\Unit\BaseUnitTest;
+use Tests\Unit\BaseTest;
 
-class UserFormTest extends BaseUnitTest
+class UserFormTest extends BaseTest
 {
     /** @dataProvider provider */
     public function test_validate_form(array $data, bool $expected)
@@ -61,7 +61,7 @@ class UserFormTest extends BaseUnitTest
                 'middleName' => 'middleName',
                 'phone' => 'phone',
                 'email' => 'email@email.ru',
-            ], true],
+            ], false],
             [[
                 'firstName' => 'firstName',
                 'lastName' => 'lastName',
