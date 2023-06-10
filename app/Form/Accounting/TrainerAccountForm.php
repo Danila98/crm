@@ -12,7 +12,6 @@ class TrainerAccountForm extends BaseForm
     private ?int $userId = null;
     private ?int $maxPupils = null;
     private ?int $pupils = null;
-    private string|bool $error;
 
     public function load(array $data): bool
     {
@@ -27,14 +26,6 @@ class TrainerAccountForm extends BaseForm
         }
 
         return true;
-    }
-
-    public function validate(): bool
-    {
-        $this->createValidator();
-        $this->error = $this->validator->fails() ? $this->validator->errors() : false;
-
-        return !$this->validator->fails();
     }
 
     public function getError(): bool|string

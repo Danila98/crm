@@ -3,20 +3,27 @@
 namespace App\Form;
 
 use Illuminate\Contracts\Validation\Validator as ValidatorProperty;
-use Illuminate\Support\Facades\Validator;
 
 abstract class BaseForm
 {
     protected ValidatorProperty $validator;
+    protected string|bool $error;
 
     abstract function load(array $data): bool;
 
-    abstract function validate(): bool;
+    abstract protected function createValidator(): void;
 
-    abstract function getError(): bool|string;
-
-    protected function createValidator(): void
+    public function validate(): bool
     {
-        $this->validator = Validator::make([], []);
+        $this->createValidator();
+        $this->error = $this->validator->fails() ? $this->validator->errors() : false;
+
+        return !$this->validator->fails();
     }
+
+    function getError(): bool|string
+    {
+        return $this->error;
+    }
+
 }

@@ -4,33 +4,37 @@ namespace App\Http\Controllers\Api\Area;
 
 use App\DataAdapter\Area\AreaDataAdapter;
 use App\Exceptions\YandexMapException;
+use App\Form\Area\AreaForm;
 use App\Http\Controllers\Api\ApiController;
-use App\Models\Area\Area;
-use App\Models\User;
 use App\Repository\Accounting\AccountRepository;
 use App\Repository\Area\AreaRepository;
 use App\Repository\Geo\CityRepository;
+use App\Services\Manage\Area\AreaManageService;
 use App\Services\Support\Map\YandexMapService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Intervention\Image\Exception\NotFoundException;
+use Illuminate\Support\Facades\Response;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
 
 
 class AreaController extends ApiController
 {
-
-
     protected YandexMapService $yandexMapService;
     protected AreaDataAdapter $areaAdapter;
     protected AreaRepository $areaRepository;
     protected CityRepository $cityRepository;
     protected AccountRepository $accountRepository;
+    protected AreaManageService $areaManageService;
 
-    public function __construct(YandexMapService  $yandexMapService,
-                                AreaDataAdapter   $areaDataAdapter,
-                                AreaRepository    $areaRepository,
-                                CityRepository    $cityRepository,
-                                AccountRepository $accountRepository,
+
+    public function __construct(
+        YandexMapService  $yandexMapService,
+        AreaDataAdapter   $areaDataAdapter,
+        AreaRepository    $areaRepository,
+        CityRepository    $cityRepository,
+        AccountRepository $accountRepository,
+        AreaManageService $areaManageService,
     )
     {
         $this->yandexMapService = $yandexMapService;
@@ -38,6 +42,7 @@ class AreaController extends ApiController
         $this->areaRepository = $areaRepository;
         $this->cityRepository = $cityRepository;
         $this->accountRepository = $accountRepository;
+        $this->areaManageService = $areaManageService;
     }
 
     /**
@@ -98,7 +103,7 @@ class AreaController extends ApiController
      *      )
      *     )
      */
-    public function list()
+    public function list(Request $request,)
     {
         $areas = $this->areaRepository->findByUser(auth('api')->user());
 
@@ -150,9 +155,9 @@ class AreaController extends ApiController
     {
         try {
             $area = $this->areaRepository->find($id);
-        } catch (NotFoundException $e) {
+        } catch (NotFound $e) {
             $this->sendError(404, 'Not Found', $e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->sendError(400, 'error', $e->getMessage());
         }
 
@@ -162,8 +167,8 @@ class AreaController extends ApiController
     /**
      * Создает площидку
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      * @OA\Post(
      * path="/api/v1/area/add",
      * summary="Добавить площадку",
@@ -176,8 +181,7 @@ class AreaController extends ApiController
      *       required={"name","city", "street", "house"},
      *       @OA\Property(property="name", type="string",  example="test"),
      *       @OA\Property(property="description", type="string", example="test"),
-     *       @OA\Property(property="work_time", type="string", example="test"),
-     *       @OA\Property(property="city", type="string", example="Москва"),
+     *       @OA\Property(property="city_id", type="integer", example=1),
      *       @OA\Property(property="street", type="string", example="Ленина"),
      *       @OA\Property(property="house", type="integer", example=1),
      *       @OA\Property(property="building", type="integer", example=1),
@@ -195,40 +199,19 @@ class AreaController extends ApiController
      */
     public function store(Request $request): JsonResponse
     {
-
-        $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'work_time' => 'nullable|string',
-            'city' => 'required|numeric',
-            'street' => 'required|string',
-            'house' => 'required|numeric',
-            'building' => 'nullable',
-        ]);
         $request = $request->all();
-        $building = isset($request['building']) ? is_int($request['building']) ? '/' . $request['building'] : $request['building'] : '';
-        $city = $this->cityRepository->find($request['city']);
-        $address = $city->name . ', ' . $request['street'] . ', д.' . $request['house'] . $building;
+        $form = new AreaForm();
+        if ($form->load($request) && $form->validate()) {
+            $area = $this->areaManageService->create($form);
 
-        try {
-            $coordinates = $this->yandexMapService->getCoordinatesByAddress($address);
-            $area = Area::create([
-                'name' => $request['name'],
-                'description' => $request['description'] ?? '',
-                'address' => $address,
-                'lat' => $coordinates['lat'] ?? null,
-                'lon' => $coordinates['lon'] ?? null,
-                'work_time' => $request['work_time'] ?? '',
-            ]);
-            $account = $this->accountRepository->findByUser(auth('api')->user());
-            $account->area()->attach($area->id);
-        } catch (YandexMapException $e) {
-            $this->sendError(500, 'map error', $e->getMessage());
-        } catch (\Exception $e) {
-            $this->sendError(400, 'unknown error', $e->getMessage());
+            return $this->sendResponse(201, ['area' => $this->areaAdapter->getModelData($area)]);
         }
 
-        return $this->sendResponse(201, ['area' => $this->areaAdapter->getModelData($area)]);
+        if (!$form->validate()) {
+            return $this->sendError(417, 'ValidationError', Response::json($form->getError()));
+        }
+
+        return $this->sendError();
     }
 
     /**
@@ -300,10 +283,11 @@ class AreaController extends ApiController
 
         return $this->sendResponse(201, []);
     }
+
     /**
      * Удаляет площадку
      *
-     * @param  integer $id
+     * @param integer $id
      * @return \Illuminate\Http\JsonResponse
      * @OA\Delete(
      *      path="/api/v1/area/delete/{area_id}",

@@ -14,8 +14,6 @@ class UserForm extends BaseForm
     private ?string $phone = null;
     private ?string $email = null;
     private ?string $password = null;
-    private string|bool $error;
-
 
     public function load(array $data): bool
     {
@@ -33,19 +31,6 @@ class UserForm extends BaseForm
         }
 
         return true;
-    }
-
-    public function validate(): bool
-    {
-        $this->createValidator();
-        $this->error = $this->validator->fails() ? $this->validator->errors() : false;
-
-        return !$this->validator->fails();
-    }
-
-    public function getError(): bool|string
-    {
-        return $this->error;
     }
 
     public function getFirstName(): ?string
@@ -91,9 +76,9 @@ class UserForm extends BaseForm
             'email' => 'required|string|email|max:255|unique:users',
             'firstName' => 'required|string|max:255|',
             'password' => 'required|string|max:255|',
-            'lastName' => 'string|max:255|',
-            'middleName' => 'string|max:255|',
-            'phone' => 'string|max:10|',
+            'lastName' => 'nullable|string|max:255|',
+            'middleName' => 'nullable|string|max:255|',
+            'phone' => 'nullable|string|max:10|',
         ]);
     }
 }

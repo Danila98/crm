@@ -5,10 +5,11 @@ namespace App\Models\Area;
 use App\Models\Accounting\TrainerAccount;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kiryanov\Filter\Filter\Filterable;
 
 class Area extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     public function account()
     {

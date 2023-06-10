@@ -219,15 +219,7 @@ class AuthController extends ApiController
         return $this->sendResponse(200, ['user' => $this->userAdapter->getModelData($user)]);
     }
 
-    /**
-     * Вернет ошибку авторизации.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function loginFail()
-    {
-        return $this->sendError(401, 'Unauthorized', 'Пользователь не авторизован');
-    }
+
     /**
      * Get the token array structure.
      *

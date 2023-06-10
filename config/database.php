@@ -152,4 +152,5 @@ return [
         'database' => ':memory:',
         'prefix' => '',
     ]
+
 ];

@@ -7,14 +7,8 @@ use Tests\Unit\BaseTest;
 class RegistrationTest extends BaseTest
 {
     /** @dataProvider successProvider */
-
-    public function test_registration_success()
+    public function test_registration_success(array $validData)
     {
-        $validData = [
-            'firstName' => 'firstName',
-            'email' => 'email@email.ru',
-            'password' => 123
-        ];
         $response = $this->post('/api/v1/auth/register', $validData);
 
         $response->assertStatus(200);
