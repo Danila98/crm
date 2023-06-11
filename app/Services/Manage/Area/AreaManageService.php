@@ -30,7 +30,7 @@ class AreaManageService
         ]);
         $account = $this->accountRepository->findByUser(auth('api')->user());
         $account->area()->attach($area->id);
-        AreaPodcast::dispatch(new AreaPodcast($area));
+        AreaPodcast::dispatch($area);
 
         return $area;
     }

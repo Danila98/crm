@@ -11,7 +11,7 @@ class AreaForm extends BaseForm
     private ?string $name = null;
     private ?string $description = null;
     private ?int $cityId = null;
-    private ?int $street = null;
+    private ?string $street = null;
     private ?int $house = null;
     private ?string $building = null;
 
@@ -49,7 +49,7 @@ class AreaForm extends BaseForm
         return $this->cityId;
     }
 
-    public function getStreet(): ?int
+    public function getStreet(): ?string
     {
         return $this->street;
     }
@@ -68,7 +68,7 @@ class AreaForm extends BaseForm
     {
         $this->validator = Validator::make([
             'name' => $this->name,
-            'description;' => $this->description,
+            'description' => $this->description,
             'city_id' => $this->cityId,
             'street' => $this->street,
             'house' => $this->house,

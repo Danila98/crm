@@ -14,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 class AreaPodcast implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    private Area $area;
     public function __construct(Area $area)
     {
         $this->area = $area;

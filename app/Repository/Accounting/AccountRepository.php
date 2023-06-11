@@ -10,13 +10,4 @@ class AccountRepository
     {
         return TrainerAccount::where(['user_id' => $user->id])->first();
     }
-
-    public function create(
-        int  $userId,
-        ?int $maxPupils,
-        ?int $pupils
-    )
-    {
-
-    }
 }
