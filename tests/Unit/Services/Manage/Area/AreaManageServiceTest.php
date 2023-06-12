@@ -12,12 +12,12 @@ class AreaManageServiceTest extends BaseTest
     public function setUp(): void
     {
         parent::setUp();
-        $this->createUser();
         $this->createCity();
     }
 
     public function test()
     {
+        $this->actingAs($this->trainer, 'api');
         $validData = [
             'name' => 'name',
             'description' => 'description',
@@ -29,7 +29,7 @@ class AreaManageServiceTest extends BaseTest
         $form = new AreaForm();
         $form->load($validData);
         $accountRepository = $this->createMock(AccountRepository::class);
-        $accountRepository->method('findByUser')->willReturn($this->user->account);
+        $accountRepository->method('findByUser')->willReturn($this->trainer->account);
         $service = new AreaManageService($accountRepository);
         $area = $service->create($form);
         $this->assertEquals($area->name, $validData['name']);

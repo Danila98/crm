@@ -5,6 +5,7 @@ namespace App\Services\Manage\Area;
 use App\Form\Area\AreaForm;
 use App\Jobs\Area\AreaPodcast;
 use App\Models\Area\Area;
+use App\Models\User;
 use App\Repository\Accounting\AccountRepository;
 
 class AreaManageService
@@ -28,8 +29,10 @@ class AreaManageService
             'house' => $form->getHouse(),
             'city_id' => $form->getCityId(),
         ]);
-        $account = $this->accountRepository->findByUser(auth('api')->user());
-        $account->area()->attach($area->id);
+        if (auth('api')->user()->hasRole(User::ROLE_TRAINER)) {
+            $account = $this->accountRepository->findByUser(auth('api')->user());
+            $account->area()->attach($area->id);
+        }
         AreaPodcast::dispatch($area);
 
         return $area;

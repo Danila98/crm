@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Models\Accounting\TrainerAccount;
 use App\Models\Geo\City;
 use App\Models\Geo\District;
 use App\Models\Geo\Region;
@@ -19,15 +18,15 @@ abstract class BaseTest extends TestCase
     protected ?Region $region = null;
     protected ?City $city = null;
 
-    protected function createUser(): void
-    {
-        $this->user = User::create([
-            'name' => 'AreaFormTest',
-            'email' => 'AreaFormTest@test.ru',
-            'password' => bcrypt('password')
-        ]);
+    protected User $trainer;
+    protected User $admin;
 
-        TrainerAccount::create(['user_id' => $this->user->id]);
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('db:seed');
+        $this->admin = User::where(['email' => 'admin@test.ru'])->first();
+        $this->trainer = User::where(['email' => 'trainer@test.ru'])->first();
     }
 
     protected function createDistrict(): void

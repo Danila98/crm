@@ -59,7 +59,7 @@ class RegistrationTest extends BaseTest
     public function test_registration_fail(array $invalidData)
     {
         $response = $this->post('/api/v1/auth/register', $invalidData);
-        $response->assertStatus(417);
+        $response->assertStatus(422);
     }
 
     public function failsProvider(): array

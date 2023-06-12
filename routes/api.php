@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\Area\ActivityCategoryController;
-use App\Http\Controllers\Api\Area\ActivityController;
-use App\Http\Controllers\Api\Area\AreaController;
-use App\Http\Controllers\Api\Area\GroupCategoryController;
-use App\Http\Controllers\Api\Area\GroupController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\Area\AreaController as AdminAreaController;
 use App\Http\Controllers\Api\Geo\CityController;
+use App\Http\Controllers\Api\Site\Area\AreaController as SiteAreaController;
+use App\Http\Controllers\Api\Trainer\Area\ActivityCategoryController;
+use App\Http\Controllers\Api\Trainer\Area\ActivityController;
+use App\Http\Controllers\Api\Trainer\Area\AreaController;
+use App\Http\Controllers\Api\Trainer\Area\GroupCategoryController;
+use App\Http\Controllers\Api\Trainer\Area\GroupController;
+use App\Http\Controllers\Api\Trainer\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,7 +31,6 @@ Route::group([
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
-//    Route::get('loginFail', [AuthController::class, 'loginFail'])->name('loginFail');
 });
 Route::group([
     'middleware' => 'api',
@@ -39,12 +40,41 @@ Route::group([
         'middleware' => 'api',
         'prefix' => 'area'
     ], function ($router) {
-        Route::post('create', [AreaController::class, 'store']);
-        Route::get('/', [AreaController::class, 'list'])->middleware('auth:api');
-        Route::post('add', [AreaController::class, 'store'])->middleware('auth:api');
-        Route::put('/update/{id}', [AreaController::class, 'update'])->middleware('auth:api');
-        Route::delete('/delete/{id}', [AreaController::class, 'destroy'])->middleware('auth:api');
-        Route::get('/{id}', [AreaController::class, 'show'])->middleware('auth:api');
+        Route::get('/', [SiteAreaController::class, 'list']);
+        Route::get('/{id}', [SiteAreaController::class, 'show']);
+    });
+    Route::group([
+        'middleware' => 'api',
+        'prefix' => 'cities'
+    ], function ($router) {
+        Route::get('/', [CityController::class, 'list']);
+    });
+});
+
+Route::group([
+    'middleware' => 'admin',
+    'prefix' => 'v1/admin'
+], function ($router) {
+    Route::group([
+        'middleware' => 'admin',
+        'prefix' => 'area'
+    ], function ($router) {
+        Route::post('add', [AdminAreaController::class, 'store']);
+        Route::put('/update/{id}', [AdminAreaController::class, 'update']);
+        Route::delete('/delete/{id}', [AdminAreaController::class, 'destroy']);
+    });
+});
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'v1'
+], function ($router) {
+    Route::group([
+        'middleware' => 'api',
+        'prefix' => 'area'
+    ], function ($router) {
+        Route::post('add', [AreaController::class, 'store']);
+        Route::put('/update/{id}', [AreaController::class, 'update']);
     });
     Route::group([
         'middleware' => 'api',
@@ -76,12 +106,7 @@ Route::group([
         Route::put('/category/update/{id}', [ActivityCategoryController::class, 'update'])->middleware('auth:api');
         Route::delete('/category/delete/{id}', [ActivityCategoryController::class, 'destroy'])->middleware('auth:api');
     });
-    Route::group([
-        'middleware' => 'api',
-        'prefix' => 'cities'
-    ], function ($router) {
-        Route::get('/', [CityController::class, 'list']);
-    });
+
 });
 
 

@@ -75,7 +75,7 @@ class AreaForm extends BaseForm
             'building' => $this->building,
         ], [
             'name' => 'required|string',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'city_id' => 'required|numeric',
             'street' => 'required|string',
             'house' => 'required|numeric',

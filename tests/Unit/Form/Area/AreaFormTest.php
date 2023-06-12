@@ -45,12 +45,6 @@ class AreaFormTest extends BaseTest
             ]],
             [[
                 'name' => 'name',
-                'city_id' => 1,
-                'street' => 'street',
-                'house' => 1,
-            ]],
-            [[
-                'name' => 'name',
                 'description' => 'description',
                 'street' => 'street',
                 'house' => 1,

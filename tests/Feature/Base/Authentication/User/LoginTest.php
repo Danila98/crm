@@ -6,15 +6,9 @@ use Tests\Unit\BaseTest;
 
 class LoginTest extends BaseTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->createUser();
-    }
-
     public function test_login_success()
     {
-        $validData = ['email' => $this->user->email, 'password' => 'password'];
+        $validData = ['email' => $this->trainer->email, 'password' => '123'];
         $response = $this->post('/api/v1/auth/login', $validData);
 
         $response->assertStatus(200);

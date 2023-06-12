@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\Area;
+namespace App\Http\Controllers\Api\Trainer\Area;
 
 use App\DataAdapter\Area\AreaDataAdapter;
 use App\Exceptions\YandexMapException;
 use App\Form\Area\AreaForm;
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Api\Trainer\TrainerController;
 use App\Repository\Accounting\AccountRepository;
 use App\Repository\Area\AreaRepository;
 use App\Repository\Geo\CityRepository;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Response;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
 
 
-class AreaController extends ApiController
+class AreaController extends TrainerController
 {
     protected YandexMapService $yandexMapService;
     protected AreaDataAdapter $areaAdapter;
@@ -37,6 +37,7 @@ class AreaController extends ApiController
         AreaManageService $areaManageService,
     )
     {
+        parent::__construct();
         $this->yandexMapService = $yandexMapService;
         $this->areaAdapter = $areaDataAdapter;
         $this->areaRepository = $areaRepository;
@@ -134,11 +135,10 @@ class AreaController extends ApiController
      *          @OA\JsonContent(
      *       @OA\Property(property="name", type="string",  example="test"),
      *       @OA\Property(property="description", type="string", example="test"),
-     *       @OA\Property(property="work_time", type="string", example="test"),
-     *       @OA\Property(property="city", type="string", example="Москва"),
      *       @OA\Property(property="street", type="string", example="Ленина"),
      *       @OA\Property(property="house", type="integer", example=1),
      *       @OA\Property(property="building", type="integer", example=1),
+     *       @OA\Property(property="city", type="object", example={id: 1, name: "Москва"}),
      *          ),
      *       ),
      *      @OA\Response(
@@ -161,7 +161,7 @@ class AreaController extends ApiController
             $this->sendError(400, 'error', $e->getMessage());
         }
 
-        return $this->sendResponse(200, ['area' => $this->areaAdapter->getModelData($area)]);
+        return $this->sendResponse(200, ['area' => $this->areaAdapter->getModelAllData($area, $area->city)]);
     }
 
     /**
@@ -178,13 +178,13 @@ class AreaController extends ApiController
      * @OA\RequestBody(
      *    required=true,
      *    @OA\JsonContent(
-     *       required={"name","city", "street", "house"},
+     *       required={"name","city_id", "street", "house"},
      *       @OA\Property(property="name", type="string",  example="test"),
      *       @OA\Property(property="description", type="string", example="test"),
      *       @OA\Property(property="city_id", type="integer", example=1),
      *       @OA\Property(property="street", type="string", example="Ленина"),
      *       @OA\Property(property="house", type="integer", example=1),
-     *       @OA\Property(property="building", type="integer", example=1),
+     *       @OA\Property(property="building", type="string", example="Ж"),
      *    ),
      * ),
      * @OA\Response(
@@ -204,11 +204,11 @@ class AreaController extends ApiController
         if ($form->load($request) && $form->validate()) {
             $area = $this->areaManageService->create($form);
 
-            return $this->sendResponse(201, ['area' => $this->areaAdapter->getModelData($area)]);
+            return $this->sendResponse(201, ['area' => $this->areaAdapter->getModelAllData($area, $area->city)]);
         }
 
         if (!$form->validate()) {
-            return $this->sendError(417, 'ValidationError', Response::json($form->getError()));
+            return $this->sendError(422, 'ValidationError', Response::json($form->getError()));
         }
 
         return $this->sendError();

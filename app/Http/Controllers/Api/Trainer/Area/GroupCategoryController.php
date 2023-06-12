@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Area;
+namespace App\Http\Controllers\Api\Trainer\Area;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Area\GroupCategory;

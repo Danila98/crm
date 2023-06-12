@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Permissions\AdminPermissions;
+use App\Http\Middleware\Permissions\TrainerPermissions;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,6 +65,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'auth:api' => \App\Http\Middleware\ApiAuthenticate::class,
+        'jwt.auth.trainer' => TrainerPermissions::class,
+        'jwt.auth.admin' => AdminPermissions::class,
     ];
 }

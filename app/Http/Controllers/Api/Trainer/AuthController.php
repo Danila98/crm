@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Trainer;
 
 use App\DataAdapter\User\UserAdapter;
 use App\Form\Accounting\TrainerAccountForm;
 use App\Form\User\UserForm;
+use App\Http\Controllers\Api\ApiController;
 use App\Models\User;
 use App\Services\Manage\Accounting\TrainerAccountManageService;
 use App\Services\Manage\UserManageService;
@@ -12,6 +13,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class AuthController extends ApiController
@@ -45,10 +47,13 @@ class AuthController extends ApiController
      * @OA\RequestBody(
      *    required=true,
      *    @OA\JsonContent(
-     *       required={"email","name", "password"},
+     *       required={"email","firstName", "password"},
      *       @OA\Property(property="email", type="string", format="email",  example="test@test.com"),
-     *       @OA\Property(property="name", type="string", example="Oxana"),
+     *       @OA\Property(property="firstName", type="string", example="Oxana"),
      *       @OA\Property(property="password", type="string", format="password", example="123"),
+     *       @OA\Property(property="lastName", type="string", format="string", example="lastName"),
+     *       @OA\Property(property="middleName", type="string", format="string", example="middleName"),
+     *       @OA\Property(property="phone", type="string", format="string", example="89124386123"),
      *    ),
      * ),
      * @OA\Response(
@@ -61,13 +66,13 @@ class AuthController extends ApiController
     {
         $form = new UserForm();
         if (!$form->load($request->all()) || !$form->validate()) {
-            return $this->sendError(417, 'Validation error', $form->getError());
+            return $this->sendError(422, 'Validation error', $form->getError());
         }
         try {
             $user = $this->userManageService->create($form);
             $formTrainerAccount = new TrainerAccountForm();
             if (!$formTrainerAccount->load(['userId' => $user->id]) || !$formTrainerAccount->validate()) {
-                return $this->sendError(417, 'Validation error', $formTrainerAccount->getError());
+                return $this->sendError(422, 'Validation error', $formTrainerAccount->getError());
             }
             $account = $this->trainerAccountManageService->create($formTrainerAccount);
         } catch (Exception $e) {
@@ -104,7 +109,7 @@ class AuthController extends ApiController
     public function login(): JsonResponse
     {
         $credentials = request(['email', 'password']);
-        if (!$token = auth('api')->attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

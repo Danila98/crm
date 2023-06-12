@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Area;
+namespace App\Http\Controllers\Api\Trainer\Area;
 
 use App\DataAdapter\Area\ActivityCategoryAdapter;
 use App\Http\Controllers\Api\ApiController;

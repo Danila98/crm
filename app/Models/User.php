@@ -3,11 +3,17 @@
 namespace App\Models;
 
 use App\Models\Accounting\TrainerAccount;
+use App\Models\Permissions\Traits\HasRolesAndPermissions;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_TRAINER = 'trainer';
+
+    use HasRolesAndPermissions;
+
     /**
      * The attributes that are mass assignable.
      *

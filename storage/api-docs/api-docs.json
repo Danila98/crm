@@ -198,6 +198,129 @@
                 ]
             }
         },
+        "/api/v1/activity/{activity_id}": {
+            "get": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Получить занятие по id",
+                "description": "Вернет занятие по id",
+                "operationId": "2ae17a143d8f81d560e3c13f286001e0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID занятия",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "test"
+                                        },
+                                        "start": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2022-08-07 23:12:30"
+                                        },
+                                        "end": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2022-08-07 23:12:30"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/activity/": {
+            "get": {
+                "tags": [
+                    "Занятия"
+                ],
+                "summary": "Получить список занятий",
+                "description": "Вернет список всех занятий текущего пользователя",
+                "operationId": "55361cc99b1ef3bae980849a3157c2f1",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "activities": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": ""
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "Fanger",
+                                                    "start": "2022-08-07 23:12:30",
+                                                    "end": "2022-08-07 23:12:30"
+                                                },
+                                                {
+                                                    "id": 2,
+                                                    "name": "Fanger",
+                                                    "start": "2022-08-07 23:12:30",
+                                                    "end": "2022-08-07 23:12:30"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/v1/activity/add": {
             "post": {
                 "tags": [
@@ -369,14 +492,6 @@
                                             "type": "string",
                                             "example": "test"
                                         },
-                                        "work_time": {
-                                            "type": "string",
-                                            "example": "test"
-                                        },
-                                        "city": {
-                                            "type": "string",
-                                            "example": "Москва"
-                                        },
                                         "street": {
                                             "type": "string",
                                             "example": "Ленина"
@@ -388,6 +503,9 @@
                                         "building": {
                                             "type": "integer",
                                             "example": 1
+                                        },
+                                        "city": {
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -424,7 +542,7 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "city",
+                                    "city_id",
                                     "street",
                                     "house"
                                 ],
@@ -437,13 +555,9 @@
                                         "type": "string",
                                         "example": "test"
                                     },
-                                    "work_time": {
-                                        "type": "string",
-                                        "example": "test"
-                                    },
-                                    "city": {
-                                        "type": "string",
-                                        "example": "Москва"
+                                    "city_id": {
+                                        "type": "integer",
+                                        "example": 1
                                     },
                                     "street": {
                                         "type": "string",
@@ -454,8 +568,8 @@
                                         "example": 1
                                     },
                                     "building": {
-                                        "type": "integer",
-                                        "example": 1
+                                        "type": "string",
+                                        "example": "Ж"
                                     }
                                 },
                                 "type": "object"
@@ -1044,7 +1158,7 @@
                             "schema": {
                                 "required": [
                                     "email",
-                                    "name",
+                                    "firstName",
                                     "password"
                                 ],
                                 "properties": {
@@ -1053,7 +1167,7 @@
                                         "format": "email",
                                         "example": "test@test.com"
                                     },
-                                    "name": {
+                                    "firstName": {
                                         "type": "string",
                                         "example": "Oxana"
                                     },
@@ -1061,6 +1175,21 @@
                                         "type": "string",
                                         "format": "password",
                                         "example": "123"
+                                    },
+                                    "lastName": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "lastName"
+                                    },
+                                    "middleName": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "middleName"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "89124386123"
                                     }
                                 },
                                 "type": "object"
